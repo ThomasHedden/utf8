@@ -1,0 +1,20 @@
+Unicode tutorial
+
+Unicode is a system for encoding natural languages so that they can be represented by computers. The goal of Unicode is to have a unique encoding for every character (letter, symbol, ideograph, etc.) in every language that has ever existed (and also some additional characters such as emoji), and to do so in a way that allows "round trip" conversion of all characters to and from other encoding schemes. The Unicode encoding scheme has been largely, but not entirely completed: the encoding method itself has been developed, but not all characters in all languages have been assigned unique code points. Over the years, several different Unicode encoding systems have been developed. Most of them have been superceded. However, unfortunately, two major Unicode encoding schemes still remain (see below), which complicates the goal of having a unique representation of every character in every language.
+
+One important characteristic of the Unicode encoding scheme(s) is that no assumptions about language, locale, etc., are required. For example, it has long been possible to encode both English and Russian. However, although English uppercase 'A' has always been encoded as 0x41, the equivalent Russian character has been encoded in different ways. 
+
+The original GOST standard GOST-13052 encoded the Russian letter 'A' as 0x61: that is correct, the Russian letter 'A' was encoded with the hex code that is now associated with English lowercase 'a'. There have been a number of different encodings of Russian: for example, in the encoding scheme KOI8-R, the Russian letter 'A' is 0xE1 and in ISO-8859-5 it is 0xB0. For this reason, even knowing that the language is Russian does not allow the intended character to be identified: it is necessary to know the character set in which it is encoded. This made it difficult to switch back and forth between different languages. 
+
+When the Russian letter 'A' is encoded in Unicode, the intended letter can be deduced merely from its hexadecimal value (0xD090 in UTF-8). This makes it is possible to write in one language and insert a word or letter in another language, without this creating any difficulty.
+
+UTF-8 and UTF-16
+
+One obvious difficulty presented by the goal of representing every character (letter, symbol, ideograph, etc.) in every language that has ever existed is the number of such characters cannot, unlike English, be represented by a single byte (char). There are two possible ways of proceeding: either English (Latin) characters (including all the common punctuation marks used in programming languages) will still be encoded the same way (ASCII), and other languages will be encoded differently (with two or more bytes), or all languages will be encoded differently (with more than one byte).
+
+If English (Latin) characters are encoded differently from those of other languages, and if this is to be done without any character set tag (and doing this without any character set tag was an important goal of Unicode), then there has to be a way to distinguish the single byte encoding from a multiple byte encoding, and this has to be done solely on the basis of the encoded value of each character. This is what the UTF-8 encoding scheme does. UTF-8 is the Unicode encoding that is almost universally used on the Internet.
+
+By contrast, if all languages are encoded with more than one byte, then English letters will have values that differ from the ASCII values. This is what UTF-16 does: every character is encoded with two bytes. To address the English compatibility problem, UTF-16 puts an empty byte before every ASCII letter: for example, English uppercase 'A' is 00000000 01000001 (0x00041) instead of 01000001 (0x041). UTF-16 also has some supplementary four-byte characters, which partly defeats the point of requiring every character to have two bytes. The Java VM uses UTF-16 internally for many purposes.
+
+Tables of Unicode code points can be found on the Internet.
+
