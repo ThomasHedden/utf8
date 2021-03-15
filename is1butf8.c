@@ -16,7 +16,7 @@ bool is1butf8(unsigned int u) {
    // this program requires that the size of an int be 4 bytes
    if( sizeof(int) != 4 ) { 
       fprintf(stderr, "sizeof(int) is not 4!\n");
-      exit(44);
+      exit(EXIT_FAILURE);
    }
    if( u >= 0x00000000 && u <= 0x0000007F ) {
       return true;
