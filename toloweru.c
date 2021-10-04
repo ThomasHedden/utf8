@@ -36,7 +36,7 @@ unsigned int toloweru(unsigned int u) {
    // if u is a two-byte character, need to look at details
    if( is2butf8(u) ) {
       if ( (u >= 0xC380 && u <= 0xC396) ||  // A grave to O dieresis
-           (u >= 0xC898 && u <= 0xC39E) ) { // O stroke to capital thorn
+           (u >= 0xC398 && u <= 0xC39E) ) { // O stroke to capital thorn
          return(u + 0x20);
       }
 
