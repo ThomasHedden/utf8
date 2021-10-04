@@ -6,12 +6,10 @@
 /* This function takes as its argument a four-byte
    unsigned int representing a UTF-8 character, and
    attempts to return the lower-case equivalent.
-   The only difference between this function and the
-   standard tolower() function in the ctype.h library
-   is that if an uppercase Cyrillic letter is found,
-   the correct lowercase equivalent is returned.
-   In all other cases, the tolower() function of the
-   ctype.h library is used.
+   This function should work for major West European
+   and East European languages, for Greek, and for
+   Cyrillic. For many other languages, it returns
+   the result of the ctype.h function tolower().
 */
 
 /***************************************************************
