@@ -39,10 +39,8 @@ unsigned int toloweru(unsigned int u) {
            (u >= 0xC898 && u <= 0xC39E) ) { // O stroke to capital thorn
          return(u + 0x20);
       }
-      // Latin extended A and B
-      // if ( (u >= 0xC480) && (u <= 0xC5BE) && (!(u%2)) ) // and letter is even
-      //   return(u + 0x01);
 
+      // Latin extended A and B, etc.
       if ( (u >= 0xC480) && (u <= 0xC4B7) && ( !(u%2) )  || // uc even, lc odd 
            (u >= 0xC4B9) && (u <= 0xC588) && (  (u%2) )  || // uc odd, lc even
            (u >= 0xC58A) && (u <= 0xC5B7) && ( !(u%2) )  || // uc even, lc odd 
