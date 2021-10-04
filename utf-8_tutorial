@@ -1,6 +1,6 @@
 UTF-8 Tutorial
 
-Every UTF-8 character is an unsigned 4-byte int
+Every UTF-8 character is represented by an unsigned byte int of one to four bytes.
 
 The important thing to understand about UTF-8 encoding is that every "character" (not char!) is represented by an unsigned int. The int must be a four-byte int, that is it must comprise 32 bits. A short int will not work, nor will a long int, nor will a signed int, nor will a char. Every character requires an unsigned, four-byte int during processing. Depending on its value, this character may be STORED in char or a short int, but during processing it must be represented as an unsigned four-byte int. A program processing UTF-8 characters should check that the platform on which it is running uses a four-byte int, and exit if this is not the case.
 
