@@ -21,7 +21,7 @@ size_t strlenu8(char * input_string) {
    // this program requires that the size of an int be 4 bytes
    if( sizeof(int) != 4 ) { 
       fprintf(stderr, "sizeof(int) is not 4!\n");
-      exit(44);
+      exit(EXIT_FAILURE);
    }
 
    // loop through all characters in string

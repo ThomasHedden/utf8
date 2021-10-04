@@ -25,10 +25,10 @@ bool is2butf8(unsigned int u) {
    unsigned int byte4 =  u & 0x000000FF;        // byte 4 of passed unsigned int
 
    // all bytes must fall within correct ranges
-   if((byte1 == 0) &&                          // byte 1 must be zero
-      (byte2 == 0) &&                          // byte 2 must be zero
-      (byte3 >= 0xC2) && (byte3 <= 0xDF) &&    // range for byte 1 of 2-byte
-      (byte4 >= 0x80) && (byte4 <= 0xBF)) {    // range for trailing byte
+   if((byte1 == 0x00) &&                        // byte 1 must be zero
+      (byte2 == 0x00) &&                        // byte 2 must be zero
+      (byte3 >= 0xC2) && (byte3 <= 0xDF) &&     // range for byte 1 of 2-byte
+      (byte4 >= 0x80) && (byte4 <= 0xBF)) {     // range for trailing byte
       return true;
    } else {
       return false;
