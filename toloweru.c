@@ -61,6 +61,8 @@ unsigned int toloweru(unsigned int u) {
       } /* else {
          return(u); // already uc
       } */
+      if (u == 0xC5B8)   // uc Latin y with dieresis
+         return(0xC3BF); // lc Latin y with dieresis
       if (u == 0xC784)
          return(0xC785);
       if (u == 0xC785)
