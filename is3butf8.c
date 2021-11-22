@@ -12,9 +12,13 @@ Pre:            This function takes an unsigned int.
 Post:           This function returns boolean true if this
                 unsigned int is a three-byte UTF-8 character;
                 otherwise, the return value is false.
-Functions used: only standard library functions
+Functions used: standard library and isb1of3b() istbutf8()
 Includes:       stdio.h, stdbool.h, & stdlib.h (for exit())
 Used in:        main()                                         */
+
+bool isb1of3b(unsigned int);
+bool istbutf8(unsigned int);
+
 bool is3butf8(unsigned int u) {
    // this program requires that the size of an int be 4 bytes
    if( sizeof(int) != 4 ) { 
@@ -29,15 +33,14 @@ bool is3butf8(unsigned int u) {
    unsigned int byte4 =  u & 0x000000FF;        // byte 4 of passed unsigned int
 
    // check whether all bytes fall in appropriate ranges
-   if((byte1 == 0x00) &&                        // byte 1 must be zero
-      (byte2 >= 0xE0) && (byte3 <= 0xEF) &&     // range for byte 1 of 3-byte
-      (byte3 >= 0x80) && (byte4 <= 0xBF) &&     // range for trailing byte
-      (byte4 >= 0x80) && (byte4 <= 0xBF)) {     // range for trailing byte
+   if((byte1 == 0x00)  && // byte 1 must be zero
+      isb1of3b(byte2)  && // range for byte 1 of 3-byte
+      istbutf8(byte3)  && // range for trailing byte
+      istbutf8(byte4)) {  // range for trailing byte
       return true;
    } else {
       // not all bytes fall in appropriate ranges
       return false;
    }
 }; /* end is3butf8() */
-
 

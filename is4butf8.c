@@ -16,9 +16,13 @@ Pre:            This function takes an unsigned int.
 Post:           This function returns boolean true if this
                 unsigned int is a four-byte UTF-8 character;
                 otherwise, the return value is false.
-Functions used: only standard library functions
+Functions used: standard library & isb1of4b() & istbutf8()
 Includes:       stdio.h, stdbool.h, & stdlib.h (for exit())
 Used in:        main()                                         */
+
+bool isb1of4b(unsigned int);
+bool istbutf8(unsigned int);
+
 bool is4butf8(unsigned int u) {
    // this program requires that the size of an int be 4 bytes
    if( sizeof(int) != 4 ) { 
@@ -33,15 +37,14 @@ bool is4butf8(unsigned int u) {
    unsigned int byte4 = (u & 0x000000FF);       // byte 4 of passed unsigned int
 
    // check whether all bytes fall in appropriate ranges
-   if((byte1 >= 0xF0) && (byte3 <= 0xF4) &&     // range for byte 1 of 4-byte
-      (byte2 >= 0x80) && (byte4 <= 0xBF) &&     // range for trailing byte
-      (byte3 >= 0x80) && (byte4 <= 0xBF) &&     // range for trailing byte
-      (byte4 >= 0x80) && (byte4 <= 0xBF)) {     // range for trailing byte
+   if(isb1of4b(byte1) && // range for byte 1 of 4-byte
+      istbutf8(byte2) && // byte 2 must be a trailing byte
+      istbutf8(byte3) && // byte 3 must be a trailing byte
+      istbutf8(byte4)) { // byte 4 must be a trailing byte
       return true;
    } else {
       // not all bytes fall in appropriate ranges
       return false;
    }
 }; /* end is4butf8() */
-
 

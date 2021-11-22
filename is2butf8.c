@@ -8,9 +8,13 @@ Pre:            This function takes an unsigned int.
 Post:           This function returns boolean true if this
                 unsigned int is a two-byte UTF-8 character;
                 otherwise, the return value is false.
-Functions used: only standard library functions
+Functions used: std library & isb1of2b() & istbutf8()
 Includes:       stdio.h, stdbool.h, & stdlib.h (for exit())
 Used in:        main()                                         */
+
+bool isb1of2b(unsigned int);
+bool istbutf8(unsigned int);
+
 bool is2butf8(unsigned int u) {
    // this program requires that the size of an int be 4 bytes
    if( sizeof(int) != 4 ) { 
@@ -25,10 +29,10 @@ bool is2butf8(unsigned int u) {
    unsigned int byte4 =  u & 0x000000FF;        // byte 4 of passed unsigned int
 
    // all bytes must fall within correct ranges
-   if((byte1 == 0x00) &&                        // byte 1 must be zero
-      (byte2 == 0x00) &&                        // byte 2 must be zero
-      (byte3 >= 0xC2) && (byte3 <= 0xDF) &&     // range for byte 1 of 2-byte
-      (byte4 >= 0x80) && (byte4 <= 0xBF)) {     // range for trailing byte
+   if((byte1 == 0x00) && // byte 1 must be zero
+      (byte2 == 0x00) && // byte 2 must be zero
+      isb1of2b(byte3) && // byte 3 must be 1st byte of 2-byte UTF-8 character
+      istbutf8(byte4)) { // byte 4 must be a trailing byte
       return true;
    } else {
       return false;
