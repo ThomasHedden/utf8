@@ -2,7 +2,9 @@ Books about Unicode
 Becker, Joe, et al. 2006. Unicode Guide: The Ultimate Reference Guide to the Universal Character Encoding Standard. A laminated reference chart from BayCharts, Inc. Part of the series QuickStudy: Computer. ISBN-13: 9781423201809, ISBN-10: 1423201809. 6 pages. A very good introduction and reference that includes as much real information in six pages as some books do in several hundred pages.
 Gillam, Richard. 2003. Unicode Demystified: a practical programmer's guide to the encoding standard. Boston, etc.: Addison-Wesley. ISBN 0-201-70052-2. xxxiii + 853 pages.
 Korpela, Jukka K. 2006. Unicode Explained. Sebastopol, etc.: O'Reilly Media, Inc. xvii + 659 pages. This book spends a lot of time explaining Unicode in the context of application software. 
+Unicode Consortion. 1991-2007. The Unicode 5.0 Standard. Upper Saddle River, NJ: Addison-Wesley. ISBN 0-321-48091-0.
 
 Online references
+Unicode Range Viewer by Russel Cottrell http://www.russellcottrell.com/greek/utilities/UnicodeRanges.htm
 UTF-8 encoding table and Unicode characters https://www.utf8-chartable.de/
 Yergeau, F. 2003. UTF-8, a transformation format of ISO 10646. RFC 3629. https://tools.ietf.org/html/rfc3629
