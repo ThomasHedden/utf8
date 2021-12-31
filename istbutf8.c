@@ -11,7 +11,7 @@ Post:           This function returns boolean true if this
                 value is false.
 Functions used: only standard library functions
 Includes:       stdio.h, stdbool.h, & stdlib.h (for exit())
-Used in:        main()                                         */
+Used in:        fgetu.c, getu.c, is2butf8.c, is3butf8.c, is4butf8.c*/
 bool istbutf8(unsigned int u) {
    // this program requires that the size of an int be 4 bytes
    if( sizeof(int) != 4 ) { 
@@ -26,4 +26,5 @@ bool istbutf8(unsigned int u) {
       return false;
    }
 }; /* end istbbutf8() */
+
 
