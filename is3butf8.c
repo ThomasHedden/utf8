@@ -14,7 +14,8 @@ Post:           This function returns boolean true if this
                 otherwise, the return value is false.
 Functions used: standard library and isb1of3b() istbutf8()
 Includes:       stdio.h, stdbool.h, & stdlib.h (for exit())
-Used in:        main()                                         */
+Used in:        fputu.c, isspaceu.c, putuchar.c, toloweru.c,
+                toupperu.c                                */
 
 bool isb1of3b(unsigned int);
 bool istbutf8(unsigned int);
