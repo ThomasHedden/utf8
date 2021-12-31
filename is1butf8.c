@@ -11,7 +11,8 @@ Post:           This function returns boolean true if this
                 is false.
 Functions used: only standard library functions
 Includes:       stdio.h, stdbool.h, & stdlib.h (for exit())
-Used in:        main()                                         */
+Used in:        fgetu.c, fputu.c, getu.c, isb1ofu8.c, isspaceu.c,
+                putuchar.c, toloweru.c, toupperu.c             */
 bool is1butf8(unsigned int u) {
    // this program requires that the size of an int be 4 bytes
    if( sizeof(int) != 4 ) { 
