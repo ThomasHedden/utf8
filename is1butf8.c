@@ -19,7 +19,7 @@ bool is1butf8(unsigned int u) {
       fprintf(stderr, "sizeof(int) is not 4!\n");
       exit(EXIT_FAILURE);
    }
-   if( u >= 0x00000000 && u <= 0x0000007F ) {
+   if( (u >= 0x00000000) && (u <= 0x0000007F) ) {
       return true;
    } else {
       return false;
