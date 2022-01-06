@@ -19,7 +19,7 @@ bool isb1of2b(unsigned int u) {
       fprintf(stderr, "sizeof(int) is not 4!\n");
       exit(EXIT_FAILURE);
    }
-   if( u >= 0x000000C2 && u <= 0x000000DF ) {
+   if( (u >= 0x000000C2) && (u <= 0x000000DF) ) {
       return true;
    } else {
       return false;
