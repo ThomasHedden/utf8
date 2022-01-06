@@ -18,7 +18,7 @@ bool isb1of3b(unsigned int u) {
       fprintf(stderr, "sizeof(int) is not 4!\n");
       exit(EXIT_FAILURE);
    }
-   if( u >= 0x000000E0 && u <= 0x000000EF ) {
+   if( (u >= 0x000000E0) && (u <= 0x000000EF) ) {
       return true;
    } else {
       return false;
