@@ -25,6 +25,6 @@ bool istbutf8(unsigned int u) {
    } else {
       return false;
    }
-}; /* end istbbutf8() */
+}; /* end istbutf8() */
 
 
