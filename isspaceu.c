@@ -3,6 +3,22 @@
 #include <ctype.h>   // needed for isspace()
 #include <stdbool.h> // needed for is1butf8() etc.
 
+/***************************************************************
+* bool isspaceu(unsigned int)
+* This function takes an unsigned four-byte int representing
+* a UTF-8 character, and returns boolean true if this UTF-8
+* character represents any kind of space. Otherwise, it
+* returns false. For 1-byte UTF-8 characters it uses the
+* ctype.h library function isspace(). For 2-byte and 3-byte
+* UTF-8 characters it attempts to check against all possible
+* space characters and returns true if it finds one. It is
+* assumed that no 4-byte UTF-8 characters represent spaces.
+* Pre:            an unsigned int representing a UTF-8 character
+* Post:           boolean true or false
+* Functions used: standard library functions and is1butf8(), etc.
+* Includes:       stdio.h, stdlib.h, ctype.h stdbool.h
+* Used in:                                                 */
+
 /***************************************************************/
 /*                 THINGS THAT NEED ATTENTION                  */
 /***************************************************************/
@@ -86,6 +102,7 @@ bool isspaceu(unsigned int v) {
       return(false);
    }
    fprintf(stderr, "%x is not a UTF-8 characeter\n", v);
-   exit(EXIT_FAILURE);
-}
+   // exit(EXIT_FAILURE);
+   return(false);
+} // end isspaceu()
 
