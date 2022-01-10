@@ -3,14 +3,20 @@
 #include <ctype.h>   // needed for tolower()
 #include <stdbool.h> // needed for is1butf8(), etc.
 
-/* This function takes as its argument a four-byte
-   unsigned int representing a UTF-8 character, and
-   attempts to return the lower-case equivalent.
-   This function should work for major West European
-   and East European languages, for Greek, and for
-   Cyrillic. For many other languages, it returns
-   the result of the ctype.h function tolower().
-*/
+/***************************************************************
+* unsigned int toloweru(unsigned int)
+* This function takes as its argument a unsigned four-byte int
+* representing a UTF-8 character, and attempts to return the
+* lower-case equivalent.
+* This function should work for major West European and
+* East European languages, for Greek, and for Cyrillic.
+* For many other languages, it returns the result of the
+* ctype.h function tolower().
+* Pre:            an unsigned int representing a UTF-8 character
+* Post:           an unsigned int representing the UTF-8 character
+* Functions used: standard library functions and is1butf8(), etc.
+* Includes:       stdio.h, stdlib.h, stdbool.h
+* Used in:                                                 */
 
 /***************************************************************
 *                      NEEDED ENHANCEMENTS                     *
@@ -154,7 +160,7 @@ unsigned int toloweru(unsigned int u) {
    if( is4butf8(u) ) {
       return(tolower(u));
    }
-}
+} // end of toloweru()
 
 /***************************************************************
 *                     FUNCTION DEFINITIONS                    *
