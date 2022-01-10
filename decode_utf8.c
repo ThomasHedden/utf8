@@ -2,16 +2,22 @@
 #include <stdlib.h>   // needed for exit()
 #include <stdbool.h>  // needed for is1butf8() etc.
 
-/***************************************************************/
-/*                           README                            */
-/***************************************************************/
-/* This function takes a Unicode character in the form of the
-   hexadecimal value of a UTF-8 character and converts it into
-   the corresponding Unicode code point in the form U+(hex value).
-   For example, 0xD096, which corresponds to Russian capital
-   letter Ж (ZH) is converted into Unicode code point U+0416.
-   Written by Thomas Hedden April 2021.
-*/
+/***************************************************************
+ * int decode_utf8(unsigned int)
+ * This function takes an unsigned int representing a UTF-8
+ * character and converts it into the corresponding Unicode
+ * code point in the form U+(hex value).
+ * For example, 0xD096, which corresponds to Russian capital
+ * letter Ж (ZH) is converted into Unicode code point U+0416.
+ * Written by Thomas Hedden April 2021, modified Jan 2022.
+ * Pre:            an unsigned int representing a UTF-8
+ *                 character.
+ * Post:           an unsigned int representing the
+ *                 Unicode code point corrsponding
+ *                 to that UTF-8 character
+ * Functions used: standard library functions, is1butf8(), etc.
+ * Includes:       stdio.h, stdlib.h, stdbool.h
+ * Used in:        utod.c, xtoU.c                          */
 
 /***************************************************************/
 /*                 THINGS THAT NEED ATTENTION                  */
