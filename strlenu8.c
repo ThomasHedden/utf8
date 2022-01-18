@@ -5,10 +5,10 @@
 strlenu8(char *)
 Pre:            This function takes a pointer to a UTF-8 string.
 Post:           This function returns an int giving the number
-                of UTF8 characters in the string. The characters
-                may be 1-byte, 2-byte, 3-byte, or 4-byte
-		characters.
-Functions used: only standard library functions
+                of UTF8 characters (not bytes!) in the string.
+	       	The characters may be 1-byte, 2-byte, 3-byte,
+	       	or 4-byte characters.
+Functions used: getu() and standard library functions
 Includes:       stdio.h and stdlib.h (for exit())
 Used in:        main()                                         */
 
@@ -27,6 +27,10 @@ size_t strlenu8(char * input_string) {
    // loop through all characters in string
    for(int i = 0; (u = getu(input_string, &i)) != '\0'; i++) {
       string_length++;
+      if(u == 0xEFBBBF) { // found UTF-8 byte order mark
+         string_length--; // don't count BOM in length
+         fprintf(stderr, "UTF-8 BOM not included in count\n");
+      }
    }
    return((size_t) string_length);
 }; /* end strlenu8() */
