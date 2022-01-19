@@ -62,17 +62,20 @@ char * fgetsu(char * buffer, int max, FILE * fp) {
 	    n++;
             return(buffer);
          }
+	 continue;
       }
       if( is2butf8(u) ) {
          buffer[j++] = (unsigned char) ((u & 0x0000FF00) >>  8),
          buffer[j++] = (unsigned char) ((u & 0x000000FF)      );
 	 n++;
+	 continue;
       }
       if( is3butf8(u) ) {
          buffer[j++] = (unsigned char) ((u & 0x00FF0000) >> 16),
          buffer[j++] = (unsigned char) ((u & 0x0000FF00) >>  8),
          buffer[j++] = (unsigned char) ((u & 0x000000FF)      );
 	 n++;
+	 continue;
       }
       if( is4butf8(u) ) {
          buffer[j++] = (unsigned char) ((u & 0xFF000000) >> 24),
@@ -80,6 +83,7 @@ char * fgetsu(char * buffer, int max, FILE * fp) {
          buffer[j++] = (unsigned char) ((u & 0x0000FF00) >>  8),
          buffer[j++] = (unsigned char) ((u & 0x000000FF)      );
 	 n++;
+	 continue;
       }
    }
 }
