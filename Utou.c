@@ -1,19 +1,17 @@
 #include <stdio.h>
 #include <stdlib.h> // needed for exit()
-#include <string.h> // needed for strcpy()
 
 /***************************************************************/
 /*                           README                            */
 /***************************************************************/
 /* This program takes a Unicode code point either in the format
-   U+<hex value> or u+<hex value> or simply <hex value>
-   and outputs the character corresponding to Unicode code point
-   encoded in UTF-8.
-   Written by Thomas Hedden December 2021.
-   Modified by Thomas Hedden February 2022 so that it does not
-   output Unicode code points that represent high surrogates
-   or low surrogates or that are greater than the allowed range
-   for Unicode code points.
+   U+<hex value> or u+<hex value> or U<hex value> or u<hexvalue>
+   or simply <hex value> and outputs the character corresponding
+   to that Unicode code point encoded in UTF-8.
+   This program does not output Unicode code points that
+   represent high surrogates or low surrogates or that are
+   greater than the allowed range for Unicode code points.
+   Written by Thomas Hedden February 2022.
 */
 
 /***************************************************************/
@@ -40,6 +38,7 @@ typedef unsigned int UNT;
 ***************************************************************/
 int putuchar(unsigned int); // output UTF-8 character
 UNT encode_utf8(UNT); // convert Unicode code point to UTF-8
+unsigned int remove_ucp_prefix(char *);
 
 /***************************************************************
 *                         MAIN FUNCTION                        *
@@ -61,39 +60,25 @@ int main(int argc, char *argv[]) {
    *                       CHECK INPUT                         *
    ************************************************************/
    if( argc == 2 ) {
-      // get input from command line
-      strcpy(input_buffer, argv[1]);
+      // get input from command line, remove "U+" prefix,
+      // and convert to unsigned int
+      ucp = remove_ucp_prefix(argv[1]);
    } else {
       fprintf(stderr, "Usage: %s Unicode code point\n", argv[0]);
       exit(EXIT_FAILURE);
    }
 
-   // loop through every byte in command line argument argv[1]
-   // byte by byte and put into buffer
-   for(int i = 0; argv[1][i] != '\0'; i++) {
-      // first remove "U+" or "u+", if present
-      if( argv[1][i] == 'U' || argv[1][i] == 'u') {
-         if( argv[1][i+1] == '+' ) {
-            for(i = 0; argv[1][i] != '\0'; i++) {
-               input_buffer[i] = argv[1][i+2];
-            }
-         }
-      } 
-   }
-
-   // convert input_buffer to unsigned int
-   // to get Unicode code point ucp
-   ucp = strtoul(input_buffer, NULL, 16); 
-
    // before outputting, ensure that Unicode code point
    // falls within permissible range
-   if( (ucp >= 0x0000) && (ucp <= 0xD7FF) ) { // BMP range
+   // BMP range below range reserved for surrogates
+   if( (ucp >= 0x0000) && (ucp <= 0xD7FF) ) {
       // output corresponding UTF-8 character
       putuchar(encode_utf8(ucp));
       fprintf(stdout, "\n");
       return(0);
    }
-   if( (ucp >= 0xE000) && (ucp <= 0xFFFF) ) { // BMP range
+   // BMP range above range reserved for surrogates
+   if( (ucp >= 0xE000) && (ucp <= 0xFFFF) ) {
       // output corresponding UTF-8 character
       putuchar(encode_utf8(ucp));
       fprintf(stdout, "\n");
@@ -107,12 +92,16 @@ int main(int argc, char *argv[]) {
       fprintf(stdout, "\n");
       return(0);
    }
+   // range of Unicode code points reserved for
+   // high surrogates in UTF-16; UTF-8 does not
+   // use surrogates, however UTF-8 sequences
+   // representing values in this range are illegal
    if( (ucp >= 0xD800) && (ucp <= 0xDBFF) ) { // HS range
-      fprintf(stderr, "%u is in high surrogate range!\n", ucp);
+      fprintf(stderr, "0x%X is in high surrogate range!\n", ucp);
       exit(EXIT_FAILURE);
    }
    if( (ucp >= 0xDC00) && (ucp <= 0xDFFF) ) { // LS range
-      fprintf(stderr, "%u is in low surrogate range!\n", ucp);
+      fprintf(stderr, "0x%X is in low surrogate range!\n", ucp);
       exit(EXIT_FAILURE);
    }
    if( ucp > 0x10FFFF ) { // outside of valid Unicode range
