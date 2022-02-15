@@ -19,7 +19,6 @@ typedef short int    IT;  // for loop iterators
 *                     FUNCTION DECLARATIONS                    *
 ***************************************************************/
 UNT getu(char *, int *);
-int putu(UNT);
 
 /***************************************************************
 *                         MAIN FUNCTION                        *
