@@ -3,34 +3,39 @@
 #include <stdbool.h> // needed for is1butf8() etc.
 
 /***************************************************************
-fgetu(FILE *)
+int fgetu(FILE *)
 Pre:            This function takes a FILE* pointer to an open
                 file stream of a file that contain UTF-8 strings.
 Post:           This function returns an int representing the
                 next UTF-8 character in the string. This int
                 comprises either 1, 2, 3, or 4 bytes, depending
-                on what is being encoded. That is, this int can
+                on what is being encoded; the other bytes of
+		the int are zero. That is, this int can
                 be thought of as 1, 2, 3, or 4 unsigned chars
-                concatenated together.
+                concatenated together, preceded by zeroes to
+	       	fill the unoccupied bytes.
                 It is the responsibility of the calling function
                 to handle the returned int correctly.
                 The FILE pointer is advanced to the point where
                 the next UTF8 character should begin.
-                This function attempts to recover when it finds
-                malformed UTF-8 characters: when an illegal
-                byte sequence is encountered, this function
-                prints the hex value of the offending byte to
-                stderr and discards it, and returns 0xEFBFBD
-                (U+FFFD), the replacement character. On the
-                next iteration it advances to the next byte.
-                For example, the sequence 0xD096 (U+0416)
-                represents a letter of the Russian alphabet.
-                The sequence 0xD041 is illegal, because 0x41
-                is not a valid trailing byte. So, an error
+                When this function finds ill-formed UTF-8
+	       	sequences, it attempts to recover: when an
+	       	illegal byte sequence is encountered, this
+	       	function prints the hex value of the offending
+	       	byte to stderr and discards it, and returns
+	       	0xEFBFBD (U+FFFD), the replacement character.
+	       	On the next iteration it advances to the next
+	       	byte. For example, the sequence 0xD096 (U+0416)
+                is a well-formed UTF-8 sequence: its first byte
+	       	is 0xD0, a legal first byte of a 2-byte sequence,
+	       	and its second byte is 0x96, a legal trailing byte.
+                However, trhe sequence 0xD041 is illegal, because
+	       	0x41 is not a valid trailing byte. So, an error
                 message is printed saying that 0xD0 has been
                 discarded, and on the next iteration the
                 function will try to process 0x41.
-Functions used: only standard library functions
+Functions used: is1butf8(), isb1of2b(), istbutf8(), isb1of3b(),
+                isb1of4b() isb1ofu8(), standard library functions
 Includes:       stdio.h; stdlib.h (for exit()); stdbool.h
 Used in:        main(); ()                                     */
 int fgetu(FILE * opened_file_stream) {
@@ -49,7 +54,9 @@ int fgetu(FILE * opened_file_stream) {
    bool  isb1of4b(unsigned int); // true if 1st byte of 4-byte UTF-8
    bool  isb1ofu8(unsigned int); // true if 1st byte of any UTF-8 character
 
-   // should the chars be signed chars ??
+   /***************************************************************
+   *                     VARIABLE DECLARATIONS                    *
+   ***************************************************************/
    unsigned char c1; // first char of a UTF-8 sequence
    unsigned char c2; // second char of a UTF-8 sequence
    unsigned char c3; // second third char of a UTF-8 sequence
@@ -71,6 +78,9 @@ int fgetu(FILE * opened_file_stream) {
    } else if( isb1of2b(c1) ) {
       // get second byte
       c2 = fgetc(opened_file_stream); 
+      if( feof(opened_file_stream) ) {
+         return(0);
+      }
       // check whether second byte is a trailing byte
       if ( istbutf8(c2) ) { // second byte is a trailing byte
          ; // do nothing: processing occurs after all checks completed
@@ -107,6 +117,9 @@ int fgetu(FILE * opened_file_stream) {
    } else if( isb1of3b(c1) ) {
       // get second byte
       c2 = fgetc(opened_file_stream); 
+      if( feof(opened_file_stream) ) {
+         return(0);
+      }
       // check whether second byte is a trailing byte
       if ( istbutf8(c2) ) { // second byte is a trailing byte
          ; // do nothing: processing occurs after all checks completed
@@ -137,6 +150,9 @@ int fgetu(FILE * opened_file_stream) {
       }
       // get third byte
       c3 = fgetc(opened_file_stream); 
+      if( feof(opened_file_stream) ) {
+         return(0);
+      }
       // check whether third byte is a trailing byte
       if ( istbutf8(c3) ) { // third byte is a trailing byte
          ; // do nothing: processing occurs after all checks completed
@@ -180,6 +196,9 @@ int fgetu(FILE * opened_file_stream) {
    } else if( isb1of4b(c1) ) {
       // get second byte
       c2 = fgetc(opened_file_stream); 
+      if( feof(opened_file_stream) ) {
+         return(0);
+      }
       // check whether second byte is a trailing byte
       if ( istbutf8(c2) ) { // second byte is a trailing byte
          ; // do nothing: processing occurs after all checks completed
@@ -210,6 +229,9 @@ int fgetu(FILE * opened_file_stream) {
       }
       // get third byte
       c3 = fgetc(opened_file_stream); 
+      if( feof(opened_file_stream) ) {
+         return(0);
+      }
       // check whether third byte is a trailing byte
       if ( istbutf8(c3) ) { // third byte is a trailing byte
          ; // do nothing: processing occurs after all checks completed
@@ -242,6 +264,9 @@ int fgetu(FILE * opened_file_stream) {
       }
       // get fourth byte
       c4 = fgetc(opened_file_stream); 
+      if( feof(opened_file_stream) ) {
+         return(0);
+      }
       // check whether fourth byte is a trailing byte
       if ( istbutf8(c4) ) { // fourth byte is a trailing byte
          ; // do nothing: processing occurs after all checks completed
@@ -259,7 +284,7 @@ int fgetu(FILE * opened_file_stream) {
 	 // this replacement character, either ignoring it or printing
 	 // the question mark. 
 	 // If fourth byte is NOT a valid first character, discard it
-	 // as well first, second, and third bytes.
+	 // as well as first, second, and third bytes.
 	 if ( isb1ofu8(c4) ) { // fourth byte is valid 1st byte so let
 	                       // it to be picked on next iteration
             ungetc(c4, opened_file_stream);
@@ -290,6 +315,9 @@ int fgetu(FILE * opened_file_stream) {
    } else if( ((unsigned int) c1 >= 0xF5) && 
               ((unsigned int) c1 <= 0xFF) ) {
       c2 = fgetc(opened_file_stream);
+      if( feof(opened_file_stream) ) {
+         return(0);
+      }
       b1 = (unsigned int) c1;
       b1 <<= 8; // promote by 8 bits
       // b1 + c2 is UTF-16 big-endian byte order mark
