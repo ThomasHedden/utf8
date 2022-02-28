@@ -8,34 +8,40 @@
 // Need to check for validity of value before returning it.
 
 /**************************************************************
-getu(char *, int *)
+int getu(char *, int *)
 Pre:            This function takes a pointer to a UTF-8 string
                 & a pointer to an int that is the starting index.
 Post:           This function returns an int representing the
                 next UTF-8 character in the string. This int
                 comprises either 1, 2, 3, or 4 bytes, depending
-                on what is being encoded. That is, this int can
+                on what is being encoded; the other bytes of
+                the int are zero. That is, this int can
                 be thought of as 1, 2, 3, or 4 unsigned chars
-                concatenated together.
+                concatenated together, preceded by zeroes to
+                fill the unoccupied bytes.
                 It is the responsibility of the calling function
                 to handle the int correctly.
+
                 The string pointer is advanced to the point where
                 the next UTF8 character should begin.
-                This function attempts to recover when it finds
-                malformed UTF-8 characters: when an illegal
-                byte sequence is encountered, this function
-                prints the hex value of the offending byte to
-                stderr and discards it, and returns 0xEFBFBD
-                (U+FFFD), the replacement character. On the
-                next iteration it advances to the next byte.
-                For example, the sequence 0xD096 (U+0416)
-                represents a letter of the Russian alphabet.
-                The sequence 0xD041 is illegal, because 0x41
-                is not a valid trailing byte. So, an error
+                When this function finds ill-formed UTF-8
+                sequences, it attempts to recover: when an
+                illegal byte sequence is encountered, this
+                function prints the hex value of the offending
+                byte to stderr and discards it, and returns
+                0xEFBFBD (U+FFFD), the replacement character.
+                On the next iteration it advances to the next
+                byte. For example, the sequence 0xD096 (U+0416)
+                is a well-formed UTF-8 sequence: its first byte
+                is 0xD0, a legal first byte of a 2-byte sequence,
+                and its second byte is 0x96, a legal trailing byte.
+                However, the sequence 0xD041 is illegal, because
+                0x41 is not a valid trailing byte. So, an error
                 message is printed saying that 0xD0 has been
                 discarded, and on the next iteration the
                 function will try to process 0x41.
-Functions used: only standard library functions
+Functions used: is1butf8(), isb1of2b(), istbutf8(), isb1of3b(),
+                isb1of4b() isb1ofu8(), standard library functions
 Includes:       stdio.h; stdlib.h (for exit()); stdbool.h
 Used in:        main(); ()                                     */
 
