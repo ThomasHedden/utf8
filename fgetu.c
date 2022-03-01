@@ -79,7 +79,11 @@ int fgetu(FILE * opened_file_stream) {
       // get second byte
       c2 = fgetc(opened_file_stream); 
       if( feof(opened_file_stream) ) {
-         return(0);
+	 // need to print error message, discard c1, and return 0xEFBFBD
+         fprintf(stderr, "Failed to get second byte of two-byte character.\n");
+         fprintf(stderr, "Discarded first byte was 0x%X\n", (unsigned int) c1);
+         return(0xEFBFBD); // replacement character
+         // return(0);
       }
       // check whether second byte is a trailing byte
       if ( istbutf8(c2) ) { // second byte is a trailing byte
@@ -118,7 +122,11 @@ int fgetu(FILE * opened_file_stream) {
       // get second byte
       c2 = fgetc(opened_file_stream); 
       if( feof(opened_file_stream) ) {
-         return(0);
+	 // need to print error message, discard c1, and return 0xEFBFBD
+         fprintf(stderr, "Failed to get second byte of three-byte character.\n");
+         fprintf(stderr, "Discarded first byte was 0x%X\n", (unsigned int) c1);
+         return(0xEFBFBD); // replacement character
+         // return(0);
       }
       // check whether second byte is a trailing byte
       if ( istbutf8(c2) ) { // second byte is a trailing byte
@@ -151,7 +159,12 @@ int fgetu(FILE * opened_file_stream) {
       // get third byte
       c3 = fgetc(opened_file_stream); 
       if( feof(opened_file_stream) ) {
-         return(0);
+	 // need to print error message, discard c1 & c2, and return 0xEFBFBD
+         fprintf(stderr, "Failed to get third byte of three-byte character.\n");
+         fprintf(stderr, "Discarded first byte was 0x%X\n", (unsigned int) c1);
+         fprintf(stderr, "Discarded second byte was 0x%X\n", (unsigned int) c2);
+         return(0xEFBFBD); // replacement character
+         // return(0);
       }
       // check whether third byte is a trailing byte
       if ( istbutf8(c3) ) { // third byte is a trailing byte
@@ -197,7 +210,11 @@ int fgetu(FILE * opened_file_stream) {
       // get second byte
       c2 = fgetc(opened_file_stream); 
       if( feof(opened_file_stream) ) {
-         return(0);
+	 // need to print error message, discard c1, and return 0xEFBFBD
+         fprintf(stderr, "Failed to get second byte of four-byte character.\n");
+         fprintf(stderr, "Discarded first byte was 0x%X\n", (unsigned int) c1);
+         return(0xEFBFBD); // replacement character
+         // return(0);
       }
       // check whether second byte is a trailing byte
       if ( istbutf8(c2) ) { // second byte is a trailing byte
@@ -230,7 +247,12 @@ int fgetu(FILE * opened_file_stream) {
       // get third byte
       c3 = fgetc(opened_file_stream); 
       if( feof(opened_file_stream) ) {
-         return(0);
+	 // need to print error message, discard c1 & c2, and return 0xEFBFBD
+         fprintf(stderr, "Failed to get third byte of four-byte character.\n");
+         fprintf(stderr, "Discarded first byte was 0x%X\n", (unsigned int) c1);
+         fprintf(stderr, "Discarded second byte was 0x%X\n", (unsigned int) c2);
+         return(0xEFBFBD); // replacement character
+         // return(0);
       }
       // check whether third byte is a trailing byte
       if ( istbutf8(c3) ) { // third byte is a trailing byte
@@ -265,6 +287,12 @@ int fgetu(FILE * opened_file_stream) {
       // get fourth byte
       c4 = fgetc(opened_file_stream); 
       if( feof(opened_file_stream) ) {
+	 // need to print error message, discard c1, c2 & c3, and return 0xEFBFBD
+         fprintf(stderr, "Failed to get fourth byte of four-byte character.\n");
+         fprintf(stderr, "Discarded first byte was 0x%X\n", (unsigned int) c1);
+         fprintf(stderr, "Discarded second byte was 0x%X\n", (unsigned int) c2);
+         fprintf(stderr, "Discarded third byte was 0x%X\n", (unsigned int) c3);
+         return(0xEFBFBD); // replacement character
          return(0);
       }
       // check whether fourth byte is a trailing byte
@@ -316,7 +344,9 @@ int fgetu(FILE * opened_file_stream) {
               ((unsigned int) c1 <= 0xFF) ) {
       c2 = fgetc(opened_file_stream);
       if( feof(opened_file_stream) ) {
-         return(0);
+         fprintf(stderr, "Discarded illegal byte: 0x%X\n", (unsigned int) c1);
+         return(0xEFBFBD);
+         // return(0);
       }
       b1 = (unsigned int) c1;
       b1 <<= 8; // promote by 8 bits
@@ -325,13 +355,15 @@ int fgetu(FILE * opened_file_stream) {
       if( (b1 + (unsigned int) c2) == 0xFEFF ) {
          fprintf(stderr, "Found UTF-16 big-endian BOM or ");
          fprintf(stderr, "2nd half of UTF-32 big-endian BOM\n");
+         fprintf(stderr, "Is this UTF-16 or UTF-32 instead of UTF-8?\n");
          return(0xEFBFBD); // replacement character
       }
       // b1 + c2 is UTF-16 little-endian byte order mark
-      // or second half of UTF-32 little-endian BOM
+      // or first half of UTF-32 little-endian BOM
       if( (b1 + (unsigned int) c2) == 0xFFFE ) {
          fprintf(stderr, "Found UTF-16 little-endian BOM or ");
-         fprintf(stderr, "2nd half of UTF-32 little-endian BOM\n");
+         fprintf(stderr, "1st half of UTF-32 little-endian BOM\n");
+         fprintf(stderr, "Is this UTF-16 or UTF-32 instead of UTF-8?\n");
          return(0xEFBFBD); // replacement character
       }
       fprintf(stderr, "Discarded illegal byte: 0x%X\n", (unsigned int) c1);
