@@ -37,7 +37,7 @@ bool is3butf8(unsigned int);
 bool is4butf8(unsigned int);
 
 /***************************************************************
-*                     FUNCTION DEFINITIONS                    *
+*                         MAIN FUNCTION                       *
 ***************************************************************/
 char * utf8cat(char * str, unsigned int u) {
    // this program requires that the size of an int be 4 bytes
