@@ -11,6 +11,7 @@ to the end of the string that is referenced by the char *
 parameter (the 1st parameter). The first byte of the UTF-8
 character overwrites the NULL character at the end of the
 string.
+If the UTF-8 character is a BOM, it is ignored.
 It returns a pointer to the string to which the UTF-8
 character has been appended.
 It is the responsibility of the calling function to ensure
@@ -59,6 +60,11 @@ char * utf8cat(char * str, unsigned int u) {
       return(str);
    }
    if( is3butf8(u) ) {
+      if(u == 0xEFBBBF) { // do not count UTF-8 BOM
+         fprintf(stderr, "ignoring UTF-8 BOM 0xERBBBF\n");
+         str[end] = '\0';
+         return(str);
+      }
       str[end++] = (char) ((u & 0x00FF0000) >> 16),
       str[end++] = (char) ((u & 0x0000FF00) >>  8),
       str[end++] = (char) ((u & 0x000000FF)      );
@@ -74,5 +80,7 @@ char * utf8cat(char * str, unsigned int u) {
       return(str);
    }
    fprintf(stderr, "0x%X is not a UTF-8 character\n", u);
+   fprintf(stderr, "String %s unchanged\n", u);
+   return(str);
 }
 
