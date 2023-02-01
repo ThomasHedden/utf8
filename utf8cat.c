@@ -25,6 +25,7 @@ Post:           the unsigned int representing the UTF-8
 		overwriting the NULL character at the end of
 		the string. The function returns the pointer
 		to this string.
+		The UTF-8 character cannot be the UTF-8 BOM.
 Functions used: standard library functions and is1butf8(), etc.
 Includes:       stdio.h, stdbool.h, stdlib.h, string.h
 Used in:        main(); ()                                   */
@@ -36,6 +37,7 @@ bool is1butf8(unsigned int);
 bool is2butf8(unsigned int);
 bool is3butf8(unsigned int);
 bool is4butf8(unsigned int);
+bool isutf8bom(unsigned int);
 
 /***************************************************************
 *                         MAIN FUNCTION                       *
@@ -60,8 +62,8 @@ char * utf8cat(char * str, unsigned int u) {
       return(str);
    }
    if( is3butf8(u) ) {
-      if(u == 0xEFBBBF) { // do not count UTF-8 BOM
-         fprintf(stderr, "ignoring UTF-8 BOM 0xERBBBF\n");
+      if(isutf8bom(u)) { // do not append UTF-8 BOM
+         fprintf(stderr, "ignoring UTF-8 BOM 0xEFBBBF\n");
          str[end] = '\0';
          return(str);
       }
@@ -80,7 +82,7 @@ char * utf8cat(char * str, unsigned int u) {
       return(str);
    }
    fprintf(stderr, "0x%X is not a UTF-8 character\n", u);
-   fprintf(stderr, "String %s unchanged\n", u);
+   fprintf(stderr, "String %s unchanged\n", str);
    return(str);
 }
 
