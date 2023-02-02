@@ -2,7 +2,6 @@
 #include <stdlib.h>   // needed for exit()
 #include <stdbool.h>  // needed for is1butf8() etc.
 #include <string.h>   // needed for strlen() and for strcspn()
-// #include <ctype.h> // needed for isspace()
 
 /***************************************************************/
 /*                           README                            */
