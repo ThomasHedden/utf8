@@ -3,7 +3,7 @@
 #include <stdbool.h>  // needed for is1butf8() etc.
 
 /***************************************************************
- * long int decode_utf8(unsigned int)
+ * unsigned long int decode_utf8(unsigned int)
  * This function takes an unsigned int representing a UTF-8
  * character and converts it into the corresponding Unicode
  * code point in the form U+(hex value), but without the U+.
@@ -15,12 +15,18 @@
  * into the bigendian UTF-16 BOM 0xFEFF and promotes it 
  * to the high-order half of its long int return value.
  * The calling function can use the BOM if desired by
- * demoting it >> 32, or it can simply ignore it.
+ * demoting it >> 32, or it can simply ignore it by
+ * casting it as an unsigned int (discarding top half).
  * Pre:            an unsigned int representing a UTF-8
  *                 character.
- * Post:           an long unsigned int representing the
- *                 Unicode code point corrsponding
- *                 to that UTF-8 character
+ * Post:           an unsigned long int representing
+ *                 the Unicode code point corrsponding
+ *                 to that UTF-8 character, unless the
+ *                 UTF-8 character is a UTF-8 BOM, in
+ *                 which case the UTF-8 BOM is converted
+ *                 into the big-endian UTF-16 BOM and
+ *                 promoted to the high-order half of
+ *                 the unsigned long int return value.
  * Functions used: standard library functions, is1butf8(), etc.
  * Includes:       stdio.h, stdlib.h, stdbool.h
  * Used in:        utod.c, xtoU.c                          */
@@ -39,10 +45,15 @@ bool  is2butf8(unsigned int); // returns true if 2-byte UTF-8
 bool  is3butf8(unsigned int); // returns true if 3-byte UTF-8
 bool  is4butf8(unsigned int); // returns true if 4-byte UTF-8
 
-long int decode_utf8(unsigned int u) {
+unsigned long int decode_utf8(unsigned int u) {
    // this program requires that the size of an int be 4 bytes
    if( sizeof(int) != 4 ) { 
       fprintf(stderr, "sizeof(int) is not 4!\n");
+      exit(EXIT_FAILURE);
+   }
+   // this program requires that the size of a long int be 8 bytes
+   if( sizeof(long int) != 8 ) { 
+      fprintf(stderr, "sizeof(unsigned long int) is not 8!\n");
       exit(EXIT_FAILURE);
    }
 
