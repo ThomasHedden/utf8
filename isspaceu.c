@@ -13,6 +13,8 @@
 * UTF-8 characters it attempts to check against all possible
 * space characters and returns true if it finds one. It is
 * assumed that no 4-byte UTF-8 characters represent spaces.
+* The only space character that does not return true is the
+* zero width no-break space U+FEFF, the UTF-8 BOM 0xEFBBBF.
 * Pre:            an unsigned int representing a UTF-8 character
 * Post:           boolean true or false
 * Functions used: standard library functions and is1butf8(), etc.
