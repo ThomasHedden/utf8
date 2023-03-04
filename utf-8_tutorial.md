@@ -73,7 +73,7 @@ As was mentioned, we do not have to perform any bit masking on the first (left) 
 Putting it all together
 
 The first thing that we have to do is to separate an unsigned int into its component bytes, as explained above. Let us define variables to hold each separate byte. As mentioned above "first" means the left (high-order) byte, and fourth means the right (low-order) byte.
-
+```
    unsigned char c1; // first char of a UTF-8 sequence
    unsigned char c2; // second char of a UTF-8 sequence
    unsigned char c3; // second third char of a UTF-8 sequence
@@ -82,7 +82,7 @@ The first thing that we have to do is to separate an unsigned int into its compo
    unsigned int  b2; // second byte of a UTF-8 sequence
    unsigned int  b3; // third byte of a UTF-8 sequence
    unsigned int  b4; // fourth byte of a UTF-8 sequence
-
+```
 Outputting UTF-8 encoded text
 
 As was mentioned above, the different bytes of a UTF-8 encoded character have to be processed individually, so the UTF-8 character must be masked and bit shifted before being processed. Here is an example of how to output a UTF-8 character represented by unsigned int u:
