@@ -42,14 +42,15 @@ Functions must return a signed 4-byte int
 
 That being said, remember that functions that access text often use return values such as EOF, which is a negative int, usually -1. For this reason, functions that process UTF-8 text and return a UTF-8 character should have a return value of a signed four-byte int rather than an unsigned four-byte int. Otherwise, it will not be possible to recognize when the function reaches an end condition such as an EOF. After the return value is obtained and processed, the return value can be cast as an unsigned int.
 
-Unicode code points vs. hexadecimal values
+Unicode code points vs. hexadecimal values of UTF-8 characters
 
-The Unicode character set assigns a unique code point to each character. For example, the uppercase Latin letter 'A' is assigned the value U+0041. In this case the hexadecimal value is 0x41. VERY IMPORTANT: in this case, there seems to be a straightforward relationship between the Unicode code point and the hexadecimal value. However, this is not generally the case. For example, Cyrillic capital letter A has a Unicode code point U+0410 but a hexadecimal value of 0xD090. I find it easier to ignore the Unicode code point and use the hexadecimal value. Because the characters are processed as four-byte ints, I will frequently include leading zeroes. For example, in the case of the Latin letter 'A', 0x00000041. This provides a reminder that the hex value 0x41 is in the low-order byte.
+The Unicode character set assigns a unique code point to each character. For example, the uppercase Latin letter 'A' is assigned the value U+0041. In this case the hexadecimal value of the UTF-8 character is 0x41. VERY IMPORTANT: in this case, there seems to be a straightforward relationship between the Unicode code point and the hexadecimal value of the UTF-8 character. However, this is not generally the case. For example, Cyrillic capital letter A has a Unicode code point U+0410 but the hexadecimal value of its UTF-8 character is 0xD090. I find it easier to ignore the Unicode code point and use the hexadecimal value of the UTF-8 character. Because the characters are processed as four-byte ints, I will frequently include leading zeroes. For example, in the case of the Latin letter 'A', 0x00000041. This provides a reminder that the hex value 0x41 is in the low-order byte. Remember that UTF-8 is only one type of Unicode encoding. Every character has not only a Unicode code point and a UTF-8 hexadecimal value, but also a UTF-16 hexadecimal value. This tutorial is only about UTF-8, so UTF-16 will not be discussed here.
 
 Encoding Unicode code points as UTF-8
 
 The way that UTF-8 is encoded from the Unicode code point is explained here:
-<a href=https://tools.ietf.org/html/rfc3629">Yergeau, F. 2003. UTF-8, a transformation format of ISO 10646. RFC 3629</a>
+<a href=https://tools.ietf.org/html/rfc3629">Yergeau, F. 2003. UTF-8, a transformation format of ISO 10646. RFC 3629, especially pages 4-5.</a>
+
 I have written a function `encode_utf8.c` that takes as its argument a Unicode code point and returns an unsigned int representing the same character in UTF-8 encoding.
 
 Nomeclature of the four bytes as left and right
