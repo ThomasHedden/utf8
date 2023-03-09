@@ -3,10 +3,12 @@ UTF-8 Tutorial
 Every UTF-8 character is represented by one to four unsigned chars. The variable length of UTF-8 characters presents complexity when processing them. For example, getting the next UTF-8 character in a string or a stream using a for() loop cannot be done simply by advancing the index by a fixed number of bytes. However, the way that UTF-8 was designed makes it possible to determine how many bytes the index should advance. The first byte of a UTF-8 character shows how many characters the entire UTF-8 character contains:
 
 This is easy to understand by viewing the characters in binary format:
+```
 A single-byte UTF-8 character must have the format 0xxxxxxx.
 A two-byte UTF-8 character must have the format    110xxxxx 10xxxxxx.
 A three-byte UTF-8 character have the format       1110xxxx 10xxxxxx 10xxxxxx.
 A four-byte UTF-8 character must have the format   11110xxx 10xxxxxx 10xxxxxx 10xxxxxx.
+```
 Thus, the UTF-8 encoding is a Huffman encoding. There can never be any ambiguity about what a sequence of bytes stands for.
 
 When writing programs to process UTF-8 text, it is easier to use the ranges of the respective bytes:
@@ -17,12 +19,14 @@ The first byte of a four-byte UTF-8 character must fall in the range 0x00F0 to 0
 Any trailing byte (second, third, or fourth byte) of a multi-byte UTF-8 character must fall in the range 0x0080 to 0x00BF.
 The byte ranges 0xC0 to 0xC1 and 0xF5 to 0xFF are illegal.
 
-For simplicity, I have created simple boolean functions that allow testing of bytes without needing to use the specific values of the ranges:
-is1butf8.c
-isb1of2b.c
-isb1of3b.c
-isb1of4b.c 
-istbutf8.c 
+For simplicity, I have created simple boolean functions with mnenomic names that allow testing of bytes without needing to use the specific values of the ranges:
+```
+is1butf8.c // "is a 1-byte UTF-8 character"
+isb1of2b.c // "is byte 1 of a 2-byte UTF-8 character"
+isb1of3b.c // "is byte 1 of a 3-byte UTF-8 character"
+isb1of4b.c // "is byte 1 of a 4-byte UTF-8 character"
+istbutf8.c // "is a trailing byte of a 2-, 3-, or 4-byte UTF-8 character"
+```
 This makes it easy to test a byte and assign it to one of the five types of bytes listed above, and the unambiguous assignment of the different kinds of bytes in turn makes it possible to determine from a byte how to handle the byte(s) that follow it. In a loop, for example a for() loop, the problem of advancing the index by the right number of bytes remains, because byte testing is done within an iteration of the loop, but the advancement of the index is usually done at the end of an iteration. The solution to this is to pass a pointer to the index into the loop so that the index can also be advanced inside a loop iteration as well as at the end of an iteration. The following code block illustrates how to do this. (The functions getu() and putu() are explained elsewhere.)
 ```
 unsigned int u;
@@ -58,7 +62,7 @@ Remember that within a four-byte int the different bytes have different numerica
 
 Bit masking.
 
-If we "bitwise and" a four-byte int with the value 0xFF000000, we will keep the value of the first byte and discard the second, third, and fourth bytes. Similarly, if we "bitwise and" a four-byte int with the value 0x00FF0000, we will keep the value of the second byte and discard the first, third, and fourth bytes; and if we "bitwise and" a four-byte int with the value 0x0000FF00, we will keep the value of the third byte and discard the first, second, and fourth bytes; and if we "bitwise and" a four-byte int with the value 0x000000FF, we will keep the value of the fourth byte and discard the first, second, and third bytes. However, remember that the other bits of a four-byte int are zeroed out by masking with 0xFF000000, the high-order byte must be considered in isolation. This is best done by bit shifting.
+If we "bitwise and" a four-byte int with the value 0xFF000000, we will keep the value of the first byte and discard the second, third, and fourth bytes. Similarly, if we "bitwise and" a four-byte int with the value 0x00FF0000, we will keep the value of the second byte and discard the first, third, and fourth bytes; and if we "bitwise and" a four-byte int with the value 0x0000FF00, we will keep the value of the third byte and discard the first, second, and fourth bytes; and if we "bitwise and" a four-byte int with the value 0x000000FF, we will keep the value of the fourth byte and discard the first, second, and third bytes. However, remember that although the other bits of a four-byte int are zeroed out by masking with 0xFF000000, the high-order byte must be considered in isolation. This is best done by bit shifting.
 
 Bit shifting
 
@@ -68,7 +72,7 @@ Obviously, bit masking should be performed before bit shifting.
 
 In the above example, we shifted the decimal number 16909320, hexadecimal 0x01020408, binary 00000001 00000010 00000100 00001000, to the right by 16 bits, so we got 00000001 00000010, but we really wanted just the second byte 00000010. If we first mask the entire four bytes with 0x00FF0000 we get 00000000 00000010 00000000 00000000. Now, if we shift this masked number to the right by 16 bits, we get 00000000 00000010 (really 00000000 00000000 00000000 00000010). Then, we can evaluate the second byte in isolation. Analogously, we can mask 00000001 00000010 00000100 00001000 by 0x0000FF00 to get 00000000 00000000 00000100 00000000. Shifting this eight bits to the right gives 00000000 00000000 00000100 (really 00000000 00000000 00000000 00000100), so we can evaluate the third byte in isolation. Finally, we can mask 00000001 00000010 00000100 00001000 by 0x000000FF to get 00000000 00000000 00000000 00001000. It is unnecessary to perform bit shifting on this fourth byte, since it is already in the rightmost position, and we can already evaluate the fourth byte in isolation. 
 
-As was mentioned, we do not have to perform any bit masking on the first (left) byte, we simply have to shift it, because the other bytes are lost anyways, and the higher-order bytes are padded with zeroes. Similarly, we do not have to perform bit shifting on the fourth (right) byte; in fact, we should not do so: we simply have to mask it. However, I always bit mask all four bytes at the beginning of my programs, so that they are easily accessible without further processing when needed.  I also like to define two different variables for each byte: an unsigned int and an unsigned char
+As was mentioned, we do not have to perform any bit masking on the first (left) byte, we simply have to shift it, because the other bytes are lost anyways, and the higher-order bytes are padded with zeroes. Similarly, we do not have to perform bit shifting on the fourth (right) byte; in fact, we should not do so: we simply have to mask it. However, I always bit mask all four bytes at the beginning of my programs, so that they are easily accessible without further processing when needed. I also like to define two different variables for each byte: an unsigned int and an unsigned char
 
 Putting it all together
 
@@ -108,6 +112,6 @@ if( is4butf8(u) ) {
                                (char) ((u & 0x000000FF)      ));
 }
 fprintf(stdout, "\n");
-
+```
 (unfinished; will be completed soon)
 
