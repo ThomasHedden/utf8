@@ -1,7 +1,7 @@
 #include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <stdbool.h>
+#include <stdlib.h>  // needed for malloc()
+#include <string.h>  // needed for strlen()
+#include <stdbool.h> // needed for isutf8bom()
 
 /***************************************************************/
 /*                           README                            */
@@ -22,7 +22,9 @@ char * remove_utf8_bom(char * passed_string) {
    unsigned int u; // holds each UTF-8 character
    char * returned_string = malloc(strlen(passed_string) + 1);
    if(returned_string == NULL) {
-      fprintf(stderr, "remove_utf8_bom line 23: insufficient memory\n");
+      fprintf(stderr, "on line %d in file %s\n",
+                       __LINE__, __FILE__);
+      fprintf(stderr, "insufficient memory\n");
       exit(EXIT_FAILURE);
    }
    // look at each UTF-8 character in passed string
