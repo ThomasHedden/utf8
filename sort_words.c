@@ -71,6 +71,7 @@ int strptrcmp(const void *sp1, const void *sp2) {
       fprintf(stderr, "on line %d in file %s\n",
                        __LINE__, __FILE__);
       fprintf(stderr, "insufficient memory\n");
+      exit(EXIT_FAILURE);
    }
    strcpy(s1_copy, s1);
    char * s2_copy = malloc(strlen(s2) + 1);
@@ -78,6 +79,7 @@ int strptrcmp(const void *sp1, const void *sp2) {
       fprintf(stderr, "on line %d in file %s\n",
                        __LINE__, __FILE__);
       fprintf(stderr, "insufficient memory\n");
+      exit(EXIT_FAILURE);
    }
    strcpy(s2_copy, s2);
    // this copy to hold the processed UTF-8 characters
@@ -86,12 +88,14 @@ int strptrcmp(const void *sp1, const void *sp2) {
       fprintf(stderr, "on line %d in file %s\n",
                        __LINE__, __FILE__);
       fprintf(stderr, "insufficient memory\n");
+      exit(EXIT_FAILURE);
    }
    char * s2u = malloc(strlen(s2) + 1);
    if(s2u == NULL) {
       fprintf(stderr, "on line %d in file %s\n",
                        __LINE__, __FILE__);
       fprintf(stderr, "insufficient memory\n");
+      exit(EXIT_FAILURE);
    }
    unsigned int u; // will hold each UTF-8 character
 
