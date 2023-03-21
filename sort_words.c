@@ -1,5 +1,5 @@
 #include <stdio.h>
-#include <stdlib.h> // needed for qsort()
+#include <stdlib.h> // needed for malloc() and qsort()
 #include <string.h> // needed for strcmp()
 #include <locale.h> // needed for setlocale()
 
@@ -67,12 +67,32 @@ int strptrcmp(const void *sp1, const void *sp2) {
    // s1 and s2 are const, so make copies
    // this copy is to eliminate const qualifier
    char * s1_copy = malloc(strlen(s1) + 1);
+   if(s1_copy == NULL) {
+      fprintf(stderr, "on line %d in file %s\n",
+                       __LINE__, __FILE__);
+      fprintf(stderr, "insufficient memory\n");
+   }
    strcpy(s1_copy, s1);
    char * s2_copy = malloc(strlen(s2) + 1);
+   if(s2_copy == NULL) {
+      fprintf(stderr, "on line %d in file %s\n",
+                       __LINE__, __FILE__);
+      fprintf(stderr, "insufficient memory\n");
+   }
    strcpy(s2_copy, s2);
    // this copy to hold the processed UTF-8 characters
    char * s1u = malloc(strlen(s1) + 1);
+   if(s1u == NULL) {
+      fprintf(stderr, "on line %d in file %s\n",
+                       __LINE__, __FILE__);
+      fprintf(stderr, "insufficient memory\n");
+   }
    char * s2u = malloc(strlen(s2) + 1);
+   if(s2u == NULL) {
+      fprintf(stderr, "on line %d in file %s\n",
+                       __LINE__, __FILE__);
+      fprintf(stderr, "insufficient memory\n");
+   }
    unsigned int u; // will hold each UTF-8 character
 
    // get each UTF-8 character from s1, tolower() it,
@@ -88,4 +108,5 @@ int strptrcmp(const void *sp1, const void *sp2) {
    // return comparison of s1u and s2u based on locale
    return(strcoll(s1u, s2u));
 }; // end strptrcmp()
+
 
