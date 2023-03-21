@@ -1,5 +1,5 @@
 #include <stdio.h>
-#include <stdlib.h>  // needed for exit() and qsort()
+#include <stdlib.h>  // needed for exit(), malloc(,) and qsort()
 #include <string.h>  // strlen(), strcpy(), strcat(), strcoll()
 #include <stdbool.h> // needed for isutf8bom()
 #include <locale.h>  // needed for setlocale()
@@ -70,6 +70,11 @@ char * sort_string(char * my_string, char * my_locale) {
    // temp_string will hold each UTF-8 character
    // that is to be put in the array
    char *       temp_string = malloc( 4*sizeof(char) + 1);
+   if(temp_string == NULL) {
+      fprintf(stderr, "on line %d in file %s\n",
+                       __LINE__, __FILE__);
+      fprintf(stderr, "insufficient memory\n");
+   }
    unsigned int number_of_bytes_in_string;
    unsigned int number_of_characters_in_string; // UTF-8
    unsigned int u; // holds each UTF-8 character in for loop
@@ -111,6 +116,11 @@ char * sort_string(char * my_string, char * my_locale) {
       temp_string[0] = '\0';
       utf8cat(temp_string, u);
       my_array_of_single_utf8_characters[ai] = malloc(sizeof(temp_string) + 1);
+      if(my_array_of_single_utf8_characters[ai] == NULL) {
+         fprintf(stderr, "on line %d in file %s\n",
+                          __LINE__, __FILE__);
+         fprintf(stderr, "insufficient memory\n");
+      }
       strcpy(my_array_of_single_utf8_characters[ai], temp_string);
    }
 
