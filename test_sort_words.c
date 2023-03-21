@@ -1,5 +1,5 @@
 #include <stdio.h>
-#include <stdlib.h>  // needed for exit()
+#include <stdlib.h>  // needed for exit() and malloc()
 #include <string.h>  // needed for strcspn()
 #include <stdbool.h> // needed for iseol()
 
@@ -120,8 +120,9 @@ int main(int argc, char * argv[]) {
       // on each line to a string with allocated memory
       char * temp_string = malloc(strlen(temp_array) + 1);
       if(temp_string == NULL) {
-         fprintf(stderr, "test_sort_words.c line 121: \
-			   insufficient memory\n");
+         fprintf(stderr, "on line %d in file %s\n",
+                          __LINE__, __FILE__);
+         fprintf(stderr, "insufficient memory\n");
          exit(EXIT_FAILURE);
       }
 
