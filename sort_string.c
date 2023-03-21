@@ -74,6 +74,7 @@ char * sort_string(char * my_string, char * my_locale) {
       fprintf(stderr, "on line %d in file %s\n",
                        __LINE__, __FILE__);
       fprintf(stderr, "insufficient memory\n");
+      exit(EXIT_FAILURE);
    }
    unsigned int number_of_bytes_in_string;
    unsigned int number_of_characters_in_string; // UTF-8
@@ -120,6 +121,7 @@ char * sort_string(char * my_string, char * my_locale) {
          fprintf(stderr, "on line %d in file %s\n",
                           __LINE__, __FILE__);
          fprintf(stderr, "insufficient memory\n");
+	 exit(EXIT_FAILURE);
       }
       strcpy(my_array_of_single_utf8_characters[ai], temp_string);
    }
