@@ -17,7 +17,7 @@ Used in:                                                       */
 bool is4b_Ucp(unsigned int u) {
    // this program requires that the size of an int be 4 bytes
    if( sizeof(int) != 4 ) { 
-      fprintf(stderr, "sizeof(int) is not 4!\n");
+      fprintf(stderr, "%s: sizeof(int) is not 4!\n", __func__);
       exit(EXIT_FAILURE);
    }
    // Unicode code point to be encoded with 4 bytes 
