@@ -29,7 +29,7 @@ Used in:                                                       */
 bool is3b_Ucp(unsigned int ucp) {
    // this program requires that the size of an int be 4 bytes
    if( sizeof(int) != 4 ) { 
-      fprintf(stderr, "sizeof(int) is not 4!\n");
+      fprintf(stderr, "%s: sizeof(int) is not 4!\n", __func__);
       exit(EXIT_FAILURE);
    }
    if(ucp < 0x00000800) { // below 3 byte UTF-8 range
